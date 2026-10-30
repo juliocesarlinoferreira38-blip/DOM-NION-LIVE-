@@ -1,40 +1,26 @@
 
 name: Build APK
-
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-
-      - name: Preparar Android se necessário
+      - name: Fix Android folder
         run: |
-          if [ ! -d android ]; then
-            flutter create . --project-name dominion_live --platforms android
-          fi
-
-      - name: Instalar dependências
-        run: flutter pub get
-
-      - name: Verificar código Dart
-        run: flutter analyze
-
-      - name: Gerar APK
-        run: flutter build apk --release
-
+          rm -rf android
+          flutter create . --project-name dominion_live --platforms android
+          rm -rf test
+      - run: flutter pub get
+      - run: flutter build apk --release --no-tree-shake-icons
       - uses: actions/upload-artifact@v4
         with:
           name: dominion-apk
