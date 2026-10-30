@@ -8,7 +8,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
-      - run: flutter create . --project-name dominion_live --platforms android --overwrite
+          channel: 'stable'
+      - name: Setup Android
+        run: |
+          flutter create temp_fix --project-name dominion_live --platforms android
+          cp -r temp_fix/android ./
+          rm -rf temp_fix
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
