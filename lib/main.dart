@@ -1,7 +1,14 @@
-
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() => runApp(const DominionLiveApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: 'https://SEU_PROJETO.supabase.co',
+    anonKey: 'SUA_CHAVE_ANONIMA_AQUI',
+  );
+  runApp(const DominionLiveApp());
+}
 
 // ======================================================
 // DOMINION LIVE — IDENTIDADE VISUAL
