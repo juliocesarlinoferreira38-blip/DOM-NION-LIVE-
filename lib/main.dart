@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
-    url: 'https://SEU_PROJETO.supabase.co',
-    anonKey: 'SUA_CHAVE_ANONIMA_AQUI',
-  );
-  runApp(const DominionLiveApp());
-}
+void main() async {WidgetsFlutterBinding.ensureInitialized();await Supabase.initialize(url: 'https://kjkbxvlceefxsdhwvusj.supabase.co', anonKey:'sb_publishable_77p5ibIx-9mnV57Ew1MGrw_GRuGbORp');runApp(const DominionLiveApp());}
 
 // ======================================================
 // DOMINION LIVE — IDENTIDADE VISUAL
