@@ -11,6 +11,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
   final supabase = Supabase.instance.client;
   List<dynamic> lives = [];
   bool loading = true;
+  String erro = '';
 
   @override
   void initState() {
@@ -19,11 +20,23 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
   }
 
   Future<void> buscarLives() async {
-    final res = await supabase.from('dominion_lives').select().order('created_at');
-    setState(() {
-      lives = res;
-      loading = false;
-    });
+    try {
+      setState(() {
+        loading = true;
+        erro = '';
+      });
+      final res = await supabase.from('dominion_lives').select().order('id', ascending: false);
+      setState(() {
+        lives = res;
+        loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        erro = e.toString();
+        loading = false;
+      });
+      print('ERRO SUPABASE: $e');
+    }
   }
 
   @override
@@ -43,6 +56,22 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
       ),
       body: loading 
         ? const Center(child: CircularProgressIndicator(color: Colors.red))
+        : erro.isNotEmpty
+        ? Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, color: Colors.red, size: 50),
+                  const SizedBox(height: 10),
+                  Text(erro, style: const TextStyle(color: Colors.white)),
+                  const SizedBox(height: 20),
+                  ElevatedButton(onPressed: buscarLives, child: const Text('Tentar de novo'))
+                ],
+              ),
+            ),
+          )
         : RefreshIndicator(
             onRefresh: buscarLives,
             child: ListView(
@@ -72,12 +101,15 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
                       ],
                     ),
                   ),
-                
+
                 const SizedBox(height: 25),
                 const Text('Ao Vivo Agora', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 ...aoVivo.map((live) => _card(live, true)),
-                
+
+                if (aoVivo.isEmpty)
+                  const Text('Nenhuma live ao vivo agora', style: TextStyle(color: Colors.white38)),
+
                 const SizedBox(height: 25),
                 const Text('Conteúdos Gravados', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
