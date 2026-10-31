@@ -1,14 +1,18 @@
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
-    url: 'https://kjkbxvlceefxsdhwvusj.supabase.co', 
-    anonKey: 'sb_publishable_77p5ibIx-9mnV57Ew1MGrw_GRuGbORp'
+    url:
+'https://kjkbxvlceefxsdhwvusj.supabase.co',
+    anonKey:
+'sb_publishable_77p5ibIx-9mnV57Ew1MGrw_GRuGbORp',
   );
-  runApp(const DominionLiveApp());
-}
+  runApp(const MyApp());
+} 
 
 const Color roxo = Color(0xFF210B45);
 const Color roxoClaro = Color(0xFF713AC0);
