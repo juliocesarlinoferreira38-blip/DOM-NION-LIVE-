@@ -5,8 +5,8 @@ import 'projeto.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'https://kjkbxvlceefxsdhwvusj.supabase.co',
-    anonKey: 'sb_publishable_77p5ibIx-9mnV57Ew1MGrw_GRuGbORp',
+      url: 'https://kjkbxvlceefxsdhwvusj.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtqa2J4dmxjZWVmeHNkaHd2dXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NjY0OTAsImV4cCI6MjA2MDM0MjQ5MH0.example',
   );
   runApp(const MyApp());
 }
