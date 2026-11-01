@@ -7,7 +7,7 @@ const supabaseUrl =
     'https://kjkbxvlceefxsdhwvusj.supabase.co';
 
 const supabaseAnonKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtqa2J4dmxjZWVmeHNkaHd2dXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMjM5MDAsImV4cCI6MjEwODY5OTkwMH0.aMkzXs5_sOY2Q095cG8Q03V4FqpfAUHGrVquRT8m9jE';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtqa2J4dmxjZWVmeHNkaHd2dXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMjM5MDAsImV4cCI6MjEwODY5OTkwMH0.aMkzXs5_sOY2Q095cG8Q03V4FqpfAUHGrVquRT8m9jE');    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtqa2J4dmxjZWVmeHNkaHd2dXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMjM5MDAsImV4cCI6MjEwODY5OTkwMH0.aMkzXs5_sOY2Q095cG8Q03V4FqpfAUHGrVquRT8m9jE';
 
 const Color dlPreto = Color(0xFF08060B);
 const Color dlPainel = Color(0xFF171020);
