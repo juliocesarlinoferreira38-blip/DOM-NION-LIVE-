@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 const Color dlPreto = Color(0xFF08060B);
 const Color dlPainel = Color(0xFF171020);
@@ -122,7 +124,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
       prefixIcon: Icon(icon, color: dlDourado),
       suffixIcon: sufixo,
       labelStyle: const TextStyle(color: Colors.white70),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: dlRoxo.withValues(alpha: 0.6))),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: dlRoxo.withOpacity(0.6))),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: dlDourado)),
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red)),
       focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red)),
@@ -147,7 +149,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, color: dlPainel,
                       border: Border.all(color: dlDourado, width: 2),
-                      boxShadow: [BoxShadow(color: dlRoxo.withValues(alpha: 0.65), blurRadius: 28, spreadRadius: 3)],
+                      boxShadow: [BoxShadow(color: dlRoxo.withOpacity(0.65), blurRadius: 28, spreadRadius: 3)],
                     ),
                     child: const Icon(Icons.sports_esports, size: 58, color: dlDourado),
                   ),
@@ -158,7 +160,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
                   const SizedBox(height: 32),
                   Container(
                     padding: const EdgeInsets.all(22),
-                    decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(24), border: Border.all(color: dlRoxo.withValues(alpha: 0.7))),
+                    decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(24), border: Border.all(color: dlRoxo.withOpacity(0.7))),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -218,7 +220,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
                             const SizedBox(height: 16),
                             Container(
                               padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(color: _mensagemErro ? Colors.red.withValues(alpha: 0.15) : Colors.green.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12), border: Border.all(color: _mensagemErro ? Colors.red : Colors.green)),
+                              decoration: BoxDecoration(color: _mensagemErro ? Colors.red.withOpacity(0.15) : Colors.green.withOpacity(0.12), borderRadius: BorderRadius.circular(12), border: Border.all(color: _mensagemErro ? Colors.red : Colors.green)),
                               child: Text(_mensagem!, textAlign: TextAlign.center, style: TextStyle(color: _mensagemErro ? Colors.red[200] : Colors.green[200])),
                             ),
                           ],
@@ -238,7 +240,7 @@ class _ProjetoDominionState extends State<ProjetoDominion> {
   }
 }
 
-// ================= INÍCIO - SÓ SALAS DE ÁUDIO, SEM VÍDEO, SEM CHAMADA =================
+// ================= INÍCIO =================
 
 class InicioDominionPage extends StatelessWidget {
   const InicioDominionPage({super.key});
@@ -269,7 +271,7 @@ class InicioDominionPage extends StatelessWidget {
           const SizedBox(height: 4),
           const Text('Só voz. Sem live de vídeo, sem chamada.', style: TextStyle(color: Colors.white60)),
           const SizedBox(height: 16),
-          _cardSala(context, titulo: 'SALA NORMAL', subtitulo: 'Sala do Alfa & Amor • 10 lugares • Só voz', icone: Icons.mic_rounded, cor: dlDourado, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalaNormalPage()))),
+          _cardSala(context, titulo: 'SALA NORMAL', subtitulo: 'Sala do ALFA & AMOR • 10 lugares • Só voz', icone: Icons.mic_rounded, cor: dlDourado, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalaNormalPage()))),
           _cardSala(context, titulo: 'SALA DE VÍDEO / YOUTUBE', subtitulo: 'Pra todos • Assistir junto • Sem aparecer • Só voz e chat', icone: Icons.play_circle_fill_rounded, cor: Colors.redAccent, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalaVideoYoutubePage()))),
           _cardSala(context, titulo: 'SALA DE JOGOS', subtitulo: 'Pra todos • Jogar junto • Só voz • Sem chamada', icone: Icons.sports_esports_rounded, cor: Colors.purpleAccent, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalaJogosPage()))),
           _cardSala(context, titulo: 'SALA NORMAL 2', subtitulo: 'Sala aberta da família • Só voz', icone: Icons.groups_rounded, cor: Colors.greenAccent, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalaNormalPage(nomeInicial: 'Sala da Família')))),
@@ -281,10 +283,10 @@ class InicioDominionPage extends StatelessWidget {
   Widget _cardSala(BuildContext context, {required String titulo, required String subtitulo, required IconData icone, required Color cor, required VoidCallback onTap}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(20), border: Border.all(color: cor.withValues(alpha: 0.6))),
+      decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(20), border: Border.all(color: cor.withOpacity(0.6))),
       child: ListTile(
         onTap: onTap,
-        leading: CircleAvatar(backgroundColor: cor.withValues(alpha: 0.2), child: Icon(icone, color: cor)),
+        leading: CircleAvatar(backgroundColor: cor.withOpacity(0.2), child: Icon(icone, color: cor)),
         title: Text(titulo, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         subtitle: Text(subtitulo, style: const TextStyle(color: Colors.white60, fontSize: 12)),
         trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 16),
@@ -293,11 +295,11 @@ class InicioDominionPage extends StatelessWidget {
   }
 }
 
-// ================= SALA NORMAL - FOTO, NOME E PERFIL NO TOPO =================
+// ================= SALA NORMAL - COM FOTO DA SALA =================
 
 class SalaNormalPage extends StatefulWidget {
   final String nomeInicial;
-  const SalaNormalPage({super.key, this.nomeInicial = 'Sala do Alfa & Amor'});
+  const SalaNormalPage({super.key, this.nomeInicial = 'Sala do ALFA & AMOR'});
   @override
   State<SalaNormalPage> createState() => _SalaNormalPageState();
 }
@@ -305,6 +307,8 @@ class SalaNormalPage extends StatefulWidget {
 class _SalaNormalPageState extends State<SalaNormalPage> {
   late String _nomeSala = widget.nomeInicial;
   bool _mutado = false;
+  File? _fotoSala; // <-- FOTO DA SALA VOLTOU
+  final ImagePicker _picker = ImagePicker();
 
   final List<Map<String, String>> _lugares = [
     {'nome': 'Luna', 'foto': 'L'}, {'nome': 'Theo', 'foto': 'T'},
@@ -330,8 +334,32 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
     if (novo != null && novo.isNotEmpty) setState(() => _nomeSala = novo);
   }
 
-  void _trocarFotoSala() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aqui você conecta o image_picker para trocar a foto da sala')));
+  Future<void> _trocarFotoSala() async {
+    final escolha = await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: dlPainel,
+        title: const Text('Foto da sala', style: TextStyle(color: Colors.white)),
+        content: const Text('De onde você quer pegar a foto?', style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, 'galeria'), child: const Text('Galeria')),
+          TextButton(onPressed: () => Navigator.pop(context, 'camera'), child: const Text('Câmera')),
+          TextButton(onPressed: () => Navigator.pop(context, 'remover'), child: const Text('Remover foto')),
+        ],
+      ),
+    );
+    if (escolha == null) return;
+    if (escolha == 'remover') {
+      setState(() => _fotoSala = null);
+      return;
+    }
+    final XFile? arquivo = await _picker.pickImage(
+      source: escolha == 'camera' ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (arquivo != null) {
+      setState(() => _fotoSala = File(arquivo.path));
+    }
   }
 
   @override
@@ -344,12 +372,18 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
             Container(
               margin: const EdgeInsets.all(12),
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.6), borderRadius: BorderRadius.circular(18), border: Border.all(color: dlDourado)),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(18), border: Border.all(color: dlDourado)),
               child: Row(
                 children: [
                   Stack(
                     children: [
-                      const CircleAvatar(radius: 31, backgroundColor: dlDourado, child: CircleAvatar(radius: 29, backgroundColor: dlRoxo, child: Icon(Icons.home_rounded, color: Colors.white, size: 30))),
+                      // FOTO DA SALA - se tiver foto mostra ela, se não mostra o ícone
+                      CircleAvatar(
+                        radius: 31,
+                        backgroundColor: dlDourado,
+                        backgroundImage: _fotoSala != null ? FileImage(_fotoSala!) : null,
+                        child: _fotoSala == null ? const CircleAvatar(radius: 29, backgroundColor: dlRoxo, child: Icon(Icons.home_rounded, color: Colors.white, size: 30)) : null,
+                      ),
                       Positioned(bottom: 0, right: 0, child: GestureDetector(onTap: _trocarFotoSala, child: Container(padding: const EdgeInsets.all(4), decoration: const BoxDecoration(color: dlDourado, shape: BoxShape.circle), child: const Icon(Icons.edit, size: 12, color: Colors.black)))),
                     ],
                   ),
@@ -357,7 +391,7 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Row(children: [Expanded(child: Text(_nomeSala, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17), overflow: TextOverflow.ellipsis)), IconButton(onPressed: _editarNome, icon: const Icon(Icons.edit, size: 16, color: dlDourado), padding: EdgeInsets.zero, constraints: const BoxConstraints())]),
-                      const Text('Hosted by • Alfa & Amor', style: TextStyle(color: Colors.white60, fontSize: 12)),
+                      const Text('Hosted by • ALFA & AMOR', style: TextStyle(color: Colors.white60, fontSize: 12)),
                       const SizedBox(height: 6),
                       Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: dlDourado, borderRadius: BorderRadius.circular(20)), child: const Text('👑 DOMINION ▼', style: TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold))),
                     ]),
@@ -373,8 +407,8 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
             Container(margin: const EdgeInsets.symmetric(horizontal: 12), padding: const EdgeInsets.all(9), decoration: BoxDecoration(gradient: const LinearGradient(colors: [dlRoxo, Color(0xFFA855F7), dlDourado]), borderRadius: BorderRadius.circular(12)), child: const Center(child: Text('✨ Bem-vindo(a) à sala DOMINION ✨', style: TextStyle(fontWeight: FontWeight.bold)))),
             const SizedBox(height: 14),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              _host('👑 Alfa', 'HOST'),
-              _host('❤️ Amor', 'HOST'),
+              _host('👑 ALFA', 'HOST', Icons.person),
+              _host('❤️ AMOR', 'HOST', Icons.favorite),
             ]),
             const SizedBox(height: 18),
             Expanded(
@@ -394,13 +428,13 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(color: Colors.black, border: Border(top: BorderSide(color: dlDourado.withValues(alpha: 0.5)))),
+              decoration: BoxDecoration(color: Colors.black, border: Border(top: BorderSide(color: dlDourado.withOpacity(0.5)))),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.card_giftcard, color: dlDourado, size: 28)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.chat_bubble, color: Colors.white, size: 26)),
                 GestureDetector(
                   onTap: () => setState(() => _mutado = !_mutado),
-                  child: Container(width: 58, height: 58, decoration: BoxDecoration(shape: BoxShape.circle, gradient: const LinearGradient(colors: [dlDourado, Color(0xFFB8860B)]), boxShadow: [BoxShadow(color: dlDourado.withValues(alpha: 0.6), blurRadius: 16)]), child: Icon(_mutado ? Icons.mic_off : Icons.mic, color: Colors.black, size: 28)),
+                  child: Container(width: 58, height: 58, decoration: BoxDecoration(shape: BoxShape.circle, gradient: const LinearGradient(colors: [dlDourado, Color(0xFFB8860B)]), boxShadow: [BoxShadow(color: dlDourado.withOpacity(0.6), blurRadius: 16)]), child: Icon(_mutado ? Icons.mic_off : Icons.mic, color: Colors.black, size: 28)),
                 ),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 26)),
               ]),
@@ -411,9 +445,9 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
     );
   }
 
-  Widget _host(String nome, String cargo) {
+  Widget _host(String nome, String cargo, IconData icone) {
     return Column(children: [
-      Container(padding: const EdgeInsets.all(3), decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: dlDourado, width: 3), boxShadow: [BoxShadow(color: dlDourado.withValues(alpha: 0.5), blurRadius: 14)]), child: const CircleAvatar(radius: 50, backgroundColor: dlRoxo, child: Icon(Icons.person, size: 50, color: Colors.white))),
+      Container(padding: const EdgeInsets.all(3), decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: dlDourado, width: 3), boxShadow: [BoxShadow(color: dlDourado.withOpacity(0.5), blurRadius: 14)]), child: CircleAvatar(radius: 50, backgroundColor: dlRoxo, child: Icon(icone, size: 50, color: Colors.white))),
       const SizedBox(height: 6),
       Text(nome, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
       Text(cargo, style: const TextStyle(color: dlDourado, fontSize: 11)),
@@ -421,7 +455,7 @@ class _SalaNormalPageState extends State<SalaNormalPage> {
   }
 }
 
-// ================= SALA DE VÍDEO / YOUTUBE - PRA TODOS, NORMAL =================
+// ================= SALA DE VÍDEO / YOUTUBE - PRA TODOS =================
 
 class SalaVideoYoutubePage extends StatelessWidget {
   const SalaVideoYoutubePage({super.key});
@@ -458,7 +492,7 @@ class SalaVideoYoutubePage extends StatelessWidget {
           ...salasPublicas.map((sala) {
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(16), border: Border.all(color: (sala['cor'] as Color).withValues(alpha: 0.6))),
+              decoration: BoxDecoration(color: dlPainel, borderRadius: BorderRadius.circular(16), border: Border.all(color: (sala['cor'] as Color).withOpacity(0.6))),
               child: ListTile(
                 leading: Container(width: 60, height: 40, decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.play_circle_fill, color: Colors.white)),
                 title: Text(sala['nome'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
@@ -515,7 +549,7 @@ class AssistirVideoJuntoPage extends StatelessWidget {
   }
 }
 
-// ================= SALA DE JOGOS - PRA TODOS, NORMAL =================
+// ================= SALA DE JOGOS - PRA TODOS =================
 
 class SalaJogosPage extends StatelessWidget {
   const SalaJogosPage({super.key});
@@ -553,4 +587,8 @@ class SalaJogosPage extends StatelessWidget {
       ),
     );
   }
-}
+}dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.5.0
+  image_picker: ^1.1.2
