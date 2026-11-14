@@ -587,8 +587,4 @@ class SalaJogosPage extends StatelessWidget {
       ),
     );
   }
-}dependencies:
-  flutter:
-    sdk: flutter
-  supabase_flutter: ^2.5.0
-  image_picker: ^1.1.2
+}
