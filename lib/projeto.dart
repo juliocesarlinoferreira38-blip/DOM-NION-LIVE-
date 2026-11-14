@@ -11,8 +11,10 @@ const Color dlDourado = Color(0xFFE5BC58);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'SUA_URL_AQUI',
-    anonKey: 'SUA_ANON_KEY_AQUI',
+    url:https://xmmaemdayfwvxambhaiu.supabase.co
+
+Copyproject URL and API keys
+    anonKey:https://xmmaemdayfwvxambhaiu.supabase.co
   );
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
