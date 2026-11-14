@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -19,17 +18,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Mantém a conexão existente com o Supabase.
-  const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
-  const supabaseAnonKey =
-      String.fromEnvironment('SUPABASE_ANON_KEY');
-
-  if (supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty) {
-    await Supabase.initialize(
-      url: supabaseUrl,
-      publishableKey: supabaseAnonKey,
-    );
-  }
+  // Conecta no DOMÍNION LIVE - Supabase
+  await Supabase.initialize(
+    url: 'https://xmmaemdayfwvxambhaiu.supabase.co',
+    publishableKey: 'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc',
+  );
 
   runApp(const DominionLiveApp());
 }
