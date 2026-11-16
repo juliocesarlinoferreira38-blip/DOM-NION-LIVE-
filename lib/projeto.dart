@@ -12,8 +12,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 const String supabaseUrl =
     'https://xmmaemdayfwvxambhaiu.supabase.co';
 
-const String supabasePublishableKey = 
- 'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc),
+const String supabasePublishableKey = String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: 'COLE_AQUI_SUA_CHAVE_PUBLISHABLE');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
