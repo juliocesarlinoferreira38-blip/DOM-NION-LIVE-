@@ -1,46 +1,71 @@
+
 import 'dart:typed_data';
-import 'package:image_picker/
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// ==========================================
-// DOMÍNION LIVE
-// PARTE 1 DE 7
-// CONFIGURAÇÃO E INICIALIZAÇÃO
-// ==========================================
+// =====================================================
+// DOMÍNION LIVE — PARTE 1 DE 7
+// Configuração, dependências e identidade visual
+// =====================================================
 
+// Configure com os dados reais do seu projeto Supabase.
 const String supabaseUrl =
     'https://xmmaemdayfwvxambhaiu.supabase.co';
 
-const String supabasePublishableKey = String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: 'COLE_AQUI_SUA_CHAVE_PUBLISHABLE');
+const String supabasePublishableKey =
+    'COLE_AQUI_SUA_CHAVE_PUBLISHABLE';
+
+// =====================================================
+// INICIALIZAÇÃO
+// =====================================================
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Supabase.initialize(
-    url: supabaseUrl,
-    anonKey: supabasePublishableKey,
-  );
+  if (supabasePublishableKey == 'COLE_AQUI_SUA_CHAVE_PUBLISHABLE' ||
+      supabasePublishableKey.trim().isEmpty) {
+    runApp(const ErroConfiguracaoDominion());
+    return;
+  }
 
-  runApp(const DominionLive());
+  try {
+    await Supabase.initialize(
+      url: supabaseUrl,
+      anonKey: supabasePublishableKey,
+    );
+
+    runApp(const DominionLive());
+  } catch (erro) {
+    runApp(
+      ErroInicializacaoDominion(
+        mensagem: erro.toString(),
+      ),
+    );
+  }
 }
 
-// ==========================================
-// CORES DO APLICATIVO
-// ==========================================
+// =====================================================
+// CORES OFICIAIS — PRETO, ROXO E DOURADO
+// =====================================================
 
 class DominionColors {
-  static const Color fundo = Color(0xFF080808);
-  static const Color painel = Color(0xFF151515);
-  static const Color dourado = Color(0xFFD4AF37);
+  static const Color fundo = Color(0xFF08060B);
+  static const Color painel = Color(0xFF171020);
+  static const Color roxo = Color(0xFF6A1B9A);
+  static const Color roxoClaro = Color(0xFF9C4DCC);
+  static const Color dourado = Color(0xFFE5BC58);
   static const Color douradoClaro = Color(0xFFFFD700);
-  static const Color branco = Colors.white;
-  static const Color cinza = Color(0xFFAAAAAA);
+  static const Color branco = Color(0xFFFFFFFF);
+  static const Color cinza = Color(0xFFBDB6C7);
+  static const Color preto = Color(0xFF000000);
 }
 
-// ==========================================
+// =====================================================
 // APLICATIVO PRINCIPAL
-// ==========================================
+// A tela de login será definida na PARTE 2.
+// =====================================================
 
 class DominionLive extends StatelessWidget {
   const DominionLive({super.key});
@@ -48,141 +73,83 @@ class DominionLive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'DOMÍNION LIVE',
-
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: DominionColors.fundo,
-
-        primaryColor: DominionColors.dourado,
-
+        primaryColor: DominionColors.roxo,
         colorScheme: const ColorScheme.dark(
           primary: DominionColors.dourado,
-          secondary: DominionColors.douradoClaro,
+          secondary: DominionColors.roxoClaro,
           surface: DominionColors.painel,
+          error: Color(0xFFFF5252),
         ),
-
         appBarTheme: const AppBarTheme(
           backgroundColor: DominionColors.fundo,
           foregroundColor: DominionColors.dourado,
           elevation: 0,
           centerTitle: true,
         ),
-
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: DominionColors.painel,
+          labelStyle: const TextStyle(
+            color: DominionColors.dourado,
+          ),
           hintStyle: const TextStyle(
             color: DominionColors.cinza,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: const BorderSide(
-              color: DominionColors.dourado,
+              color: DominionColors.roxo,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: const BorderSide(
-              color: Colors.white24,
+              color: DominionColors.roxo,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: const BorderSide(
               color: DominionColors.dourado,
-              width: 2,
+              width: 1.5,
             ),
           ),
         ),
       ),
-
       home: const TelaInicialDominion(),
     );
   }
 }
 
-// ==========================================
-// TELA INICIAL
-// ==========================================
+// =====================================================
+// ERRO DE CONFIGURAÇÃO DO SUPABASE
+// =====================================================
 
-class TelaInicialDominion extends StatelessWidget {
-  const TelaInicialDominion({super.key});
+class ErroConfiguracaoDominion extends StatelessWidget {
+  const ErroConfiguracaoDominion({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF202020),
-              Color(0xFF080808),
-              Color(0xFF000000),
-            ],
-          ),
-        ),
-
-        child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(25),
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
-                  const Icon(
-                    Icons.workspace_premium,
-                    color: DominionColors.dourado,
-                    size: 95,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text(
-                    'DOMÍNION LIVE',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: DominionColors.dourado,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  const Text(
-                    'SEU MUNDO. SUA SALA. SEU DOMÍNIO.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      letterSpacing: 2,
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  const CircularProgressIndicator(
-                    color: DominionColors.dourado,
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  const Text(
-                    'Preparando seu domínio...',
-                    style: TextStyle(
-                      color: DominionColors.cinza,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: DominionColors.fundo,
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Text(
+              'DOMÍNION LIVE\n\n'
+              'Configure a chave do Supabase '
+              'antes de iniciar o aplicativo.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: DominionColors.dourado,
+                fontSize: 18,
               ),
             ),
           ),
@@ -191,6 +158,68 @@ class TelaInicialDominion extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// ERRO AO INICIAR A CONEXÃO
+// =====================================================
+
+class ErroInicializacaoDominion extends StatelessWidget {
+  final String mensagem;
+
+  const ErroInicializacaoDominion({
+    super.key,
+    required this.mensagem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: DominionColors.fundo,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.wifi_off,
+                  color: DominionColors.dourado,
+                  size: 52,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Não foi possível iniciar o DOMÍNION LIVE.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: DominionColors.branco,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  mensagem,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: DominionColors.cinza,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+ // =====================================================
+// DOMÍNION LIVE — PARTE 2 DE 7
+// LOGIN, CADASTRO E RECUPERAÇÃO DE SENHA
+// =====================================================
+
 class TelaInicialDominion extends StatefulWidget {
   const TelaInicialDominion({super.key});
 
@@ -199,26 +228,69 @@ class TelaInicialDominion extends StatefulWidget {
       _TelaInicialDominionState();
 }
 
-class _TelaInicialDominionState
-    extends State<TelaInicialDominion> {
+class _TelaInicialDominionState extends State<TelaInicialDominion> {
+  final TextEditingController _emailController =
+      TextEditingController();
 
-  final _emailController = TextEditingController();
-  final _senhaController = TextEditingController();
+  final TextEditingController _senhaController =
+      TextEditingController();
+
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
 
   bool _modoCadastro = false;
   bool _carregando = false;
   bool _mostrarSenha = false;
+  bool _mostrarConfirmacao = false;
 
   String? _mensagem;
   bool _mensagemErro = false;
 
+  SupabaseClient get _supabase => Supabase.instance.client;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    _confirmarSenhaController.dispose();
+    super.dispose();
+  }
+
+  void _mostrarMensagem(String texto, {bool erro = false}) {
+    if (!mounted) return;
+
+    setState(() {
+      _mensagem = texto;
+      _mensagemErro = erro;
+    });
+  }
+
   Future<void> _entrar() async {
-    if (_emailController.text.trim().isEmpty ||
-        _senhaController.text.isEmpty) {
-      setState(() {
-        _mensagem = 'Preencha seu e-mail e senha.';
-        _mensagemErro = true;
-      });
+    final email = _emailController.text.trim();
+    final senha = _senhaController.text;
+
+    if (email.isEmpty || !email.contains('@')) {
+      _mostrarMensagem(
+        'Digite um endereço de e-mail válido.',
+        erro: true,
+      );
+      return;
+    }
+
+    if (senha.length < 6) {
+      _mostrarMensagem(
+        'A senha precisa ter pelo menos 6 caracteres.',
+        erro: true,
+      );
+      return;
+    }
+
+    if (_modoCadastro &&
+        senha != _confirmarSenhaController.text) {
+      _mostrarMensagem(
+        'As senhas não são iguais.',
+        erro: true,
+      );
       return;
     }
 
@@ -228,39 +300,40 @@ class _TelaInicialDominionState
     });
 
     try {
-      final auth = Supabase.instance.client.auth;
-
       if (_modoCadastro) {
-        final resposta = await auth.signUp(
-          email: _emailController.text.trim(),
-          password: _senhaController.text,
+        final resposta = await _supabase.auth.signUp(
+          email: email,
+          password: senha,
         );
 
-        if (resposta.user != null) {
+        if (!mounted) return;
+
+        if (resposta.session != null) {
+          _abrirTelaPrincipal();
+        } else {
           _mostrarMensagem(
-            'Cadastro realizado! Verifique seu e-mail.',
+            'Cadastro iniciado! Confira seu e-mail para '
+            'confirmar a conta e depois entre no aplicativo.',
           );
         }
       } else {
-        await auth.signInWithPassword(
-          email: _emailController.text.trim(),
-          password: _senhaController.text,
+        await _supabase.auth.signInWithPassword(
+          email: email,
+          password: senha,
         );
 
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const TelaPrincipalDominion(),
-            ),
-          );
-        }
+        if (!mounted) return;
+        _abrirTelaPrincipal();
       }
-    } on AuthException catch (e) {
-      _mostrarMensagem(e.message, erro: true);
-    } catch (e) {
+    } on AuthException catch (erro) {
       _mostrarMensagem(
-        'Não foi possível conectar. Tente novamente.',
+        _traduzirErro(erro.message),
+        erro: true,
+      );
+    } catch (erro) {
+      _mostrarMensagem(
+        'Não foi possível concluir a operação. '
+        'Confira sua internet e tente novamente.',
         erro: true,
       );
     } finally {
@@ -270,235 +343,351 @@ class _TelaInicialDominionState
     }
   }
 
+  String _traduzirErro(String mensagem) {
+    final texto = mensagem.toLowerCase();
+
+    if (texto.contains('invalid login credentials')) {
+      return 'E-mail ou senha incorretos.';
+    }
+
+    if (texto.contains('email not confirmed')) {
+      return 'Confirme seu e-mail antes de entrar.';
+    }
+
+    if (texto.contains('user already registered')) {
+      return 'Este e-mail já possui uma conta.';
+    }
+
+    if (texto.contains('password should be at least')) {
+      return 'A senha precisa ter pelo menos 6 caracteres.';
+    }
+
+    if (texto.contains('rate limit')) {
+      return 'Muitas tentativas. Aguarde um pouco.';
+    }
+
+    return mensagem;
+  }
+
+  void _abrirTelaPrincipal() {
+    if (!mounted) return;
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (_) => const TelaPrincipalDominion(),
+      ),
+    );
+  }
+
   Future<void> _recuperarSenha() async {
     final email = _emailController.text.trim();
 
-    if (email.isEmpty) {
+    if (email.isEmpty || !email.contains('@')) {
       _mostrarMensagem(
-        'Digite seu e-mail primeiro.',
+        'Digite seu e-mail no campo acima para recuperar a senha.',
         erro: true,
       );
       return;
     }
 
+    setState(() {
+      _carregando = true;
+      _mensagem = null;
+    });
+
     try {
-      await Supabase.instance.client.auth
-          .resetPasswordForEmail(email);
+      await _supabase.auth.resetPasswordForEmail(email);
 
       _mostrarMensagem(
-        'Verifique seu e-mail para redefinir a senha.',
+        'Se o e-mail estiver cadastrado, você receberá '
+        'as instruções para redefinir sua senha.',
       );
-    } on AuthException catch (e) {
-      _mostrarMensagem(e.message, erro: true);
+    } on AuthException catch (erro) {
+      _mostrarMensagem(
+        _traduzirErro(erro.message),
+        erro: true,
+      );
+    } catch (_) {
+      _mostrarMensagem(
+        'Não foi possível solicitar a recuperação. '
+        'Tente novamente.',
+        erro: true,
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _carregando = false);
+      }
     }
   }
 
-  void _mostrarMensagem(
-    String mensagem, {
-    bool erro = false,
+  Widget _campo({
+    required TextEditingController controller,
+    required String rotulo,
+    required IconData icone,
+    bool senha = false,
+    bool mostrar = false,
+    VoidCallback? alternar,
   }) {
-    if (!mounted) return;
-
-    setState(() {
-      _mensagem = mensagem;
-      _mensagemErro = erro;
-    });
-  }
-
-  void _alternarModo() {
-    setState(() {
-      _modoCadastro = !_modoCadastro;
-      _mensagem = null;
-    });
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _senhaController.dispose();
-    super.dispose();
+    return TextField(
+      controller: controller,
+      enabled: !_carregando,
+      obscureText: senha && !mostrar,
+      keyboardType: rotulo == 'E-mail'
+          ? TextInputType.emailAddress
+          : TextInputType.text,
+      autocorrect: false,
+      enableSuggestions: !senha,
+      style: const TextStyle(
+        color: DominionColors.branco,
+      ),
+      decoration: InputDecoration(
+        labelText: rotulo,
+        prefixIcon: Icon(
+          icone,
+          color: DominionColors.dourado,
+        ),
+        suffixIcon: senha
+            ? IconButton(
+                onPressed: alternar,
+                icon: Icon(
+                  mostrar
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: DominionColors.dourado,
+                ),
+              )
+            : null,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color(0xFF202020),
-              Color(0xFF080808),
-              Colors.black,
-            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
+            colors: [
+              DominionColors.fundo,
+              DominionColors.painel,
+              DominionColors.fundo,
+            ],
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.workspace_premium,
-                    color: DominionColors.dourado,
-                    size: 85,
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  const Text(
-                    'DOMÍNION LIVE',
-                    style: TextStyle(
-                      color: DominionColors.dourado,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  Text(
-                    _modoCadastro
-                        ? 'CRIE SUA CONTA'
-                        : 'ENTRE NO SEU DOMÍNIO',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      letterSpacing: 2,
-                    ),
-                  ),
-
-                  const SizedBox(height: 35),
-
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 440,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: DominionColors.painel,
+                        border: Border.all(
+                          color: DominionColors.dourado,
+                          width: 2,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x556A1B9A),
+                            blurRadius: 24,
+                            spreadRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.workspace_premium,
+                        size: 58,
                         color: DominionColors.dourado,
                       ),
-                      hintText: 'Seu e-mail',
                     ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  TextField(
-                    controller: _senhaController,
-                    obscureText: !_mostrarSenha,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.lock_outline,
+                    const SizedBox(height: 20),
+                    const Text(
+                      'DOMÍNION LIVE',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
                         color: DominionColors.dourado,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2,
                       ),
-                      hintText: 'Sua senha',
-                      suffixIcon: IconButton(
-                        onPressed: () {
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'SUA VOZ. SUA FAMÍLIA. SEU IMPÉRIO!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: DominionColors.branco,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      _modoCadastro
+                          ? 'CRIE SUA CONTA'
+                          : 'BEM-VINDO DE VOLTA',
+                      style: const TextStyle(
+                        color: DominionColors.dourado,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    _campo(
+                      controller: _emailController,
+                      rotulo: 'E-mail',
+                      icone: Icons.email_outlined,
+                    ),
+                    const SizedBox(height: 16),
+                    _campo(
+                      controller: _senhaController,
+                      rotulo: 'Senha',
+                      icone: Icons.lock_outline,
+                      senha: true,
+                      mostrar: _mostrarSenha,
+                      alternar: () {
+                        setState(() {
+                          _mostrarSenha = !_mostrarSenha;
+                        });
+                      },
+                    ),
+                    if (_modoCadastro) ...[
+                      const SizedBox(height: 16),
+                      _campo(
+                        controller: _confirmarSenhaController,
+                        rotulo: 'Confirmar senha',
+                        icone: Icons.lock_reset,
+                        senha: true,
+                        mostrar: _mostrarConfirmacao,
+                        alternar: () {
                           setState(() {
-                            _mostrarSenha = !_mostrarSenha;
+                            _mostrarConfirmacao =
+                                !_mostrarConfirmacao;
                           });
                         },
-                        icon: Icon(
-                          _mostrarSenha
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: DominionColors.dourado,
-                        ),
                       ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  if (!_modoCadastro)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: _recuperarSenha,
-                        child: const Text(
-                          'Esqueci minha senha',
-                          style: TextStyle(
-                            color: DominionColors.dourado,
+                    ],
+                    if (!_modoCadastro)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _carregando
+                              ? null
+                              : _recuperarSenha,
+                          child: const Text(
+                            'Esqueci minha senha',
+                            style: TextStyle(
+                              color: DominionColors.dourado,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-
-                  if (_mensagem != null)
-                    Container(
+                    if (_mensagem != null) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: _mensagemErro
+                              ? const Color(0x332F1111)
+                              : const Color(0x332A6B36),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: _mensagemErro
+                                ? Colors.redAccent
+                                : Colors.greenAccent,
+                          ),
+                        ),
+                        child: Text(
+                          _mensagem!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: _mensagemErro
+                                ? Colors.redAccent
+                                : Colors.greenAccent,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                    SizedBox(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: DominionColors.painel,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _mensagemErro
-                              ? Colors.red
-                              : Colors.green,
+                      height: 54,
+                      child: ElevatedButton(
+                        onPressed: _carregando ? null : _entrar,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: DominionColors.dourado,
+                          foregroundColor: DominionColors.preto,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        _mensagem!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: _mensagemErro
-                              ? Colors.red[200]
-                              : Colors.green[200],
-                        ),
-                      ),
-                    ),
-
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: _carregando ? null : _entrar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: DominionColors.dourado,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: _carregando
-                          ? const CircularProgressIndicator(
-                              color: Colors.black,
-                            )
-                          : Text(
-                              _modoCadastro
-                                  ? 'CRIAR CONTA'
-                                  : 'ENTRAR',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 2,
+                        child: _carregando
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: DominionColors.preto,
+                                ),
+                              )
+                            : Text(
+                                _modoCadastro
+                                    ? 'CRIAR MINHA CONTA'
+                                    : 'ENTRAR NO DOMÍNION',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1,
+                                ),
                               ),
-                            ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  TextButton(
-                    onPressed: _alternarModo,
-                    child: Text(
-                      _modoCadastro
-                          ? 'Já tem conta? Entrar'
-                          : 'Não tem conta? Cadastre-se',
-                      style: const TextStyle(
-                        color: DominionColors.dourado,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: _carregando
+                          ? null
+                          : () {
+                              setState(() {
+                                _modoCadastro = !_modoCadastro;
+                                _mensagem = null;
+                                _mensagemErro = false;
+                              });
+                            },
+                      child: Text(
+                        _modoCadastro
+                            ? 'Já tenho conta — entrar'
+                            : 'Ainda não tenho conta — cadastrar',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: DominionColors.branco,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    const Text(
+                      'AG. DOMÍNION ALFA',
+                      style: TextStyle(
+                        color: DominionColors.dourado,
+                        fontSize: 12,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -508,10 +697,10 @@ class _TelaInicialDominionState
   }
 }
 
-// ==========================================
-// DOMÍNION LIVE - PARTE 3 DE 7
-// TELA PRINCIPAL DO APLICATIVO
-// ==========================================
+ // =====================================================
+// DOMÍNION LIVE — PARTE 3 DE 7
+// TELA PRINCIPAL E NAVEGAÇÃO
+// =====================================================
 
 class TelaPrincipalDominion extends StatefulWidget {
   const TelaPrincipalDominion({super.key});
@@ -523,10 +712,13 @@ class TelaPrincipalDominion extends StatefulWidget {
 
 class _TelaPrincipalDominionState
     extends State<TelaPrincipalDominion> {
-
-  String _nomeUsuario = 'Membro DOMÍNION';
-  String? _fotoUsuario;
+  int _indiceSelecionado = 0;
   bool _carregandoPerfil = true;
+
+  String _nomeUsuario = 'Guerreiro DOMÍNION';
+  String? _fotoUsuario;
+
+  SupabaseClient get _supabase => Supabase.instance.client;
 
   @override
   void initState() {
@@ -535,277 +727,181 @@ class _TelaPrincipalDominionState
   }
 
   Future<void> _carregarPerfil() async {
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
+    final usuario = _supabase.auth.currentUser;
 
-    if (usuario == null) return;
+    if (usuario == null) {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(
+            builder: (_) => const TelaInicialDominion(),
+          ),
+        );
+      }
+      return;
+    }
 
     try {
-      final dados = await Supabase.instance.client
+      final dados = await _supabase
           .from('perfis')
-          .select()
+          .select('nome, foto_url')
           .eq('id', usuario.id)
           .maybeSingle();
 
-      if (mounted) {
+      if (!mounted) return;
+
+      if (dados != null) {
+        final nome = dados['nome'] as String?;
+        final foto = dados['foto_url'] as String?;
+
         setState(() {
-          _nomeUsuario =
-              dados?['nome'] ?? usuario.email ?? 'Membro';
-          _fotoUsuario = dados?['foto_url'];
-          _carregandoPerfil = false;
+          if (nome != null && nome.trim().isNotEmpty) {
+            _nomeUsuario = nome.trim();
+          }
+
+          _fotoUsuario = foto;
         });
       }
     } catch (_) {
+      // A tela continua funcionando mesmo se o perfil
+      // ainda não existir na tabela "perfis".
+    } finally {
       if (mounted) {
-        setState(() {
-          _nomeUsuario = usuario.email ?? 'Membro';
-          _carregandoPerfil = false;
-        });
+        setState(() => _carregandoPerfil = false);
       }
     }
   }
 
   Future<void> _sair() async {
-    await Supabase.instance.client.auth.signOut();
+    try {
+      await _supabase.auth.signOut();
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const TelaInicialDominion(),
-      ),
-      (route) => false,
-    );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute<void>(
+          builder: (_) => const TelaInicialDominion(),
+        ),
+        (route) => false,
+      );
+    } catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível sair da conta.'),
+        ),
+      );
+    }
   }
 
-  void _abrirPerfil() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
+  Future<void> _abrirPerfil() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
         builder: (_) => const PerfilDominion(),
       ),
     );
+
+    if (mounted) {
+      _carregarPerfil();
+    }
   }
 
-  void _criarSala() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
+  void _abrirCriarSala() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
         builder: (_) => const CriarSalaDominion(),
       ),
     );
   }
 
-  Widget _botaoMenu({
-    required IconData icone,
-    required String titulo,
-    required VoidCallback acao,
-  }) {
-    return InkWell(
-      onTap: acao,
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: DominionColors.painel,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: DominionColors.dourado.withOpacity(0.5),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icone,
-              color: DominionColors.dourado,
-              size: 27,
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: Text(
-                titulo,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: DominionColors.dourado,
-              size: 17,
-            ),
-          ],
-        ),
+  void _abrirSalas() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const ListaSalasDominion(),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'DOMÍNION LIVE',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: _sair,
-            icon: const Icon(Icons.logout),
-            tooltip: 'Sair',
-          ),
-        ],
+  void _abrirSalaDeVideos() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SalaVideosDominion(),
       ),
+    );
+  }
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  void _abrirPresentes() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const PresentesDominion(),
+      ),
+    );
+  }
+
+  Widget _botaoPrincipal({
+    required IconData icone,
+    required String titulo,
+    required String descricao,
+    required VoidCallback aoTocar,
+    Color cor = DominionColors.dourado,
+  }) {
+    return Card(
+      color: DominionColors.painel,
+      margin: const EdgeInsets.only(bottom: 14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(
+          color: cor.withOpacity(0.55),
+        ),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: aoTocar,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
             children: [
-
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                width: 54,
+                height: 54,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF493813),
-                      Color(0xFF17130A),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: DominionColors.dourado,
-                  ),
+                  color: cor.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: Row(
+                child: Icon(
+                  icone,
+                  color: cor,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 34,
-                      backgroundColor: DominionColors.dourado,
-                      backgroundImage: _fotoUsuario != null
-                          ? NetworkImage(_fotoUsuario!)
-                          : null,
-                      child: _fotoUsuario == null
-                          ? const Icon(
-                              Icons.person,
-                              color: Colors.black,
-                              size: 38,
-                            )
-                          : null,
+                    Text(
+                      titulo,
+                      style: const TextStyle(
+                        color: DominionColors.branco,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-
-                    const SizedBox(width: 15),
-
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'BEM-VINDO AO DOMÍNIO',
-                            style: TextStyle(
-                              color: DominionColors.dourado,
-                              fontSize: 11,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            _carregandoPerfil
-                                ? 'Carregando...'
-                                : _nomeUsuario,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 5),
+                    Text(
+                      descricao,
+                      style: const TextStyle(
+                        color: DominionColors.cinza,
+                        fontSize: 12,
                       ),
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                'SEU DOMÍNIO',
-                style: TextStyle(
-                  color: DominionColors.dourado,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              _botaoMenu(
-                icone: Icons.add_circle_outline,
-                titulo: 'CRIAR UMA SALA',
-                acao: _criarSala,
-              ),
-
-              const SizedBox(height: 13),
-
-              _botaoMenu(
-                icone: Icons.meeting_room,
-                titulo: 'SALAS DISPONÍVEIS',
-                acao: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          const ListaSalasDominion(),
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 13),
-
-              _botaoMenu(
-                icone: Icons.person_outline,
-                titulo: 'MEU PERFIL',
-                acao: _abrirPerfil,
-              ),
-
-              const SizedBox(height: 13),
-
-              _botaoMenu(
-                icone: Icons.card_giftcard,
-                titulo: 'PRESENTES',
-                acao: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Sistema de presentes será ativado.',
-                      ),
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 35),
-
-              const Center(
-                child: Text(
-                  'DOMÍNION LIVE © 2026',
-                  style: TextStyle(
-                    color: Colors.white38,
-                    letterSpacing: 2,
-                    fontSize: 11,
-                  ),
-                ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: DominionColors.dourado,
+                size: 17,
               ),
             ],
           ),
@@ -813,1276 +909,1444 @@ class _TelaPrincipalDominionState
       ),
     );
   }
-}
 
-// ==========================================
-// DOMÍNION LIVE - PARTE 4 DE 7
-// CRIAÇÃO DE SALAS
-// ==========================================
-
-class CriarSalaDominion extends StatefulWidget {
-  const CriarSalaDominion({super.key});
-
-  @override
-  State<CriarSalaDominion> createState() =>
-      _CriarSalaDominionState();
-}
-
-class _CriarSalaDominionState
-    extends State<CriarSalaDominion> {
-
-  final _nomeController = TextEditingController();
-  final _descricaoController = TextEditingController();
-
-  bool _privada = false;
-  bool _carregando = false;
-
-  Future<void> _criarSala() async {
-    final nome = _nomeController.text.trim();
-    final descricao = _descricaoController.text.trim();
-
-    if (nome.isEmpty) {
-      _mensagem('Digite o nome da sala.');
-      return;
-    }
-
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
-
-    if (usuario == null) {
-      _mensagem('Faça login novamente.');
-      return;
-    }
-
-    setState(() => _carregando = true);
-
-    try {
-      await Supabase.instance.client
-          .from('salas')
-          .insert({
-        'nome': nome,
-        'descricao': descricao,
-        'privada': _privada,
-        'criador_id': usuario.id,
-        'total_cadeiras': 10,
-      });
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sala criada com sucesso!'),
-        ),
-      );
-
-      Navigator.pop(context);
-    } on PostgrestException catch (e) {
-      _mensagem('Erro ao criar sala: ${e.message}');
-    } catch (_) {
-      _mensagem('Não foi possível criar a sala.');
-    } finally {
-      if (mounted) {
-        setState(() => _carregando = false);
-      }
-    }
-  }
-
-  void _mensagem(String texto) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(texto)),
-    );
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _descricaoController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('CRIAR SALA'),
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(22),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            const Center(
-              child: Icon(
-                Icons.meeting_room,
-                color: DominionColors.dourado,
-                size: 85,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Center(
-              child: Text(
-                'CRIE SEU DOMÍNIO',
-                style: TextStyle(
-                  color: DominionColors.dourado,
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              'NOME DA SALA',
-              style: TextStyle(
-                color: DominionColors.dourado,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            TextField(
-              controller: _nomeController,
-              maxLength: 40,
-              decoration: const InputDecoration(
-                hintText: 'Digite o nome da sua sala',
-                prefixIcon: Icon(
-                  Icons.edit,
-                  color: DominionColors.dourado,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              'DESCRIÇÃO',
-              style: TextStyle(
-                color: DominionColors.dourado,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            TextField(
-              controller: _descricaoController,
-              maxLines: 3,
-              maxLength: 150,
-              decoration: const InputDecoration(
-                hintText: 'Descreva sua sala...',
-                alignLabelWithHint: true,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: DominionColors.painel,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color: DominionColors.dourado,
-                ),
-              ),
-
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.event_seat,
-                    color: DominionColors.dourado,
-                    size: 30,
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: Text(
-                      '10 CADEIRAS DISPONÍVEIS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            SwitchListTile(
-              value: _privada,
-              onChanged: (valor) {
-                setState(() => _privada = valor);
-              },
-              activeThumbColor: DominionColors.dourado,
-              title: const Text(
-                'Sala privada',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: const Text(
-                'Restringir o acesso à sala',
-                style: TextStyle(color: Colors.white54),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: _carregando ? null : _criarSala,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: DominionColors.dourado,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                child: _carregando
-                    ? const CircularProgressIndicator(
-                        color: Colors.black,
-                      )
-                    : const Text(
-                        'CRIAR SALA',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                        ),
-                      ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ==========================================
-// DOMÍNION LIVE - PARTE 5 DE 7
-// LISTA DE SALAS EM TEMPO REAL
-// ==========================================
-
-class ListaSalasDominion extends StatefulWidget {
-  const ListaSalasDominion({super.key});
-
-  @override
-  State<ListaSalasDominion> createState() =>
-      _ListaSalasDominionState();
-}
-
-class _ListaSalasDominionState
-    extends State<ListaSalasDominion> {
-
-  late final Stream<List<Map<String, dynamic>>> _salasStream;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _salasStream = Supabase.instance.client
-        .from('salas')
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: false);
-  }
-
-  Future<void> _atualizar() async {
-    setState(() {
-      _salasStream = Supabase.instance.client
-          .from('salas')
-          .stream(primaryKey: ['id'])
-          .order('created_at', ascending: false);
-    });
-  }
-
-  void _abrirSala(Map<String, dynamic> sala) {
-    if (sala['privada'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Esta sala é privada. Acesso por convite.',
-          ),
-        ),
-      );
-      return;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => TelaSalaDominion(
-          sala: sala,
-        ),
-      ),
-    );
-  }
-
-  Widget _cartaoSala(Map<String, dynamic> sala) {
-    final nome = sala['nome'] ?? 'Sala DOMÍNION';
-    final descricao = sala['descricao'] ?? '';
-    final privada = sala['privada'] == true;
-
-    return InkWell(
-      onTap: () => _abrirSala(sala),
-      borderRadius: BorderRadius.circular(16),
-
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 15),
+  Widget _inicio() {
+    return RefreshIndicator(
+      color: DominionColors.dourado,
+      backgroundColor: DominionColors.painel,
+      onRefresh: _carregarPerfil,
+      child: ListView(
         padding: const EdgeInsets.all(18),
-
-        decoration: BoxDecoration(
-          color: DominionColors.painel,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: DominionColors.dourado.withOpacity(0.6),
-          ),
-        ),
-
-        child: Row(
-          children: [
-
-            Container(
-              width: 55,
-              height: 55,
-              decoration: BoxDecoration(
-                color: const Color(0xFF30250D),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Icon(
-                Icons.meeting_room,
-                color: DominionColors.dourado,
-                size: 30,
-              ),
-            ),
-
-            const SizedBox(width: 14),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  Text(
-                    nome.toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: DominionColors.dourado,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    descricao.toString().isEmpty
-                        ? 'Bem-vindo à sala!'
-                        : descricao.toString(),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
-                  ),
-
-                  const SizedBox(height: 7),
-
-                  Text(
-                    privada ? 'SALA PRIVADA' : 'SALA PÚBLICA',
-                    style: TextStyle(
-                      color: privada
-                          ? Colors.orange
-                          : Colors.greenAccent,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: DominionColors.dourado,
-              size: 18,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SALAS DISPONÍVEIS'),
-      ),
-
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: _salasStream,
-
-        builder: (context, snapshot) {
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'Erro ao carregar salas: ${snapshot.error}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
-
-          if (snapshot.connectionState ==
-                  ConnectionState.waiting &&
-              !snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: DominionColors.dourado,
-              ),
-            );
-          }
-
-          final salas = snapshot.data ?? [];
-
-          if (salas.isEmpty) {
-            return RefreshIndicator(
-              color: DominionColors.dourado,
-              onRefresh: _atualizar,
-              child: ListView(
-                children: const [
-                  SizedBox(height: 150),
-                  Icon(
-                    Icons.meeting_room_outlined,
-                    size: 75,
-                    color: DominionColors.dourado,
-                  ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      'Nenhuma sala disponível.',
-                      style: TextStyle(
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return RefreshIndicator(
-            color: DominionColors.dourado,
-            onRefresh: _atualizar,
-
-            child: ListView.builder(
-              padding: const EdgeInsets.all(18),
-              itemCount: salas.length,
-              itemBuilder: (context, index) {
-                return _cartaoSala(salas[index]);
-              },
-            ),
-          );
-        },
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: DominionColors.dourado,
-        foregroundColor: Colors.black,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const CriarSalaDominion(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
- // ==========================================
- // DOMÍNION LIVE - PARTE 6 DE 7
- // INTERIOR DAS SALAS
- // ==========================================
-
-class TelaSalaDominion extends StatefulWidget {
-  final Map<String, dynamic> sala;
-
-  const TelaSalaDominion({
-    super.key,
-    required this.sala,
-  });
-
-  @override
-  State<TelaSalaDominion> createState() =>
-      _TelaSalaDominionState();
-}
-
-class _TelaSalaDominionState extends State<TelaSalaDominion> {
-  final _mensagemController = TextEditingController();
-
-  late final Stream<List<Map<String, dynamic>>> _mensagensStream;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _mensagensStream = Supabase.instance.client
-        .from('mensagens_sala')
-        .stream(primaryKey: ['id'])
-        .eq('sala_id', widget.sala['id'])
-        .order('created_at', ascending: true);
-  }
-
-  Future<void> _enviarMensagem() async {
-    final texto = _mensagemController.text.trim();
-
-    if (texto.isEmpty) return;
-
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
-
-    if (usuario == null) return;
-
-    try {
-      await Supabase.instance.client
-          .from('mensagens_sala')
-          .insert({
-        'sala_id': widget.sala['id'],
-        'usuario_id': usuario.id,
-        'mensagem': texto,
-      });
-
-      _mensagemController.clear();
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Não foi possível enviar a mensagem.'),
-        ),
-      );
-    }
-  }
-
-  Widget _cadeira(int numero) {
-    return Container(
-      width: 65,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.symmetric(vertical: 9),
-      decoration: BoxDecoration(
-        color: DominionColors.painel,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: DominionColors.dourado.withOpacity(0.7),
-        ),
-      ),
-      child: Column(
-        children: [
-          const Icon(
-            Icons.account_circle,
-            color: DominionColors.dourado,
-            size: 35,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Lugar $numero',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 10,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _mensagem(Map<String, dynamic> dados) {
-    final usuarioAtual =
-        Supabase.instance.client.auth.currentUser?.id;
-
-    final minhaMensagem =
-        dados['usuario_id'] == usuarioAtual;
-
-    return Align(
-      alignment: minhaMensagem
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 10,
-        ),
-        padding: const EdgeInsets.all(12),
-        constraints: const BoxConstraints(maxWidth: 270),
-        decoration: BoxDecoration(
-          color: minhaMensagem
-              ? const Color(0xFF493813)
-              : DominionColors.painel,
-          borderRadius: BorderRadius.circular(13),
-          border: Border.all(
-            color: DominionColors.dourado.withOpacity(0.4),
-          ),
-        ),
-        child: Text(
-          dados['mensagem']?.toString() ?? '',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _mensagemController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.sala['nome']?.toString() ?? 'Sala DOMÍNION',
-        ),
-      ),
-
-      body: Column(
         children: [
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF493813),
-                  Color(0xFF15110A),
-                ],
-              ),
-            ),
-            child: const Text(
-              'DOMÍNION LIVE • SALA DE CONEXÃO',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: DominionColors.dourado,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          const Text(
-            'ÁREA DE PARTICIPANTES',
-            style: TextStyle(
-              color: DominionColors.dourado,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // 2 CADEIRAS NA PARTE SUPERIOR
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _cadeira(1),
-              _cadeira(2),
-            ],
-          ),
-
-          // 8 CADEIRAS NA PARTE INFERIOR
-          Wrap(
-            alignment: WrapAlignment.center,
-            children: List.generate(
-              8,
-              (index) => _cadeira(index + 3),
-            ),
-          ),
-
-          const Divider(
-            color: DominionColors.dourado,
-            height: 25,
-          ),
-
-          const Text(
-            'CHAT DA SALA',
-            style: TextStyle(
-              color: DominionColors.dourado,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          Expanded(
-            child: StreamBuilder<
-                List<Map<String, dynamic>>>(
-              stream: _mensagensStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text(
-                      'Erro ao carregar mensagens.',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                  );
-                }
-
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: DominionColors.dourado,
-                    ),
-                  );
-                }
-
-                final mensagens = snapshot.data!;
-
-                if (mensagens.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Seja o primeiro a conversar!',
-                      style: TextStyle(color: Colors.white54),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  itemCount: mensagens.length,
-                  itemBuilder: (context, index) {
-                    return _mensagem(mensagens[index]);
-                  },
-                );
-              },
-            ),
-          ),
-
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _mensagemController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: 'Digite sua mensagem...',
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  IconButton(
-                    onPressed: _enviarMensagem,
-                    icon: const Icon(
-                      Icons.send,
-                      color: DominionColors.dourado,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
- // ==========================================
- // DOMÍNION LIVE - PARTE 7 DE 7
- // PERFIL, AVATAR, PRESENTES E ADMINISTRAÇÃO
- // ==========================================
-
-// ==========================================
-// PERFIL DO USUÁRIO
-// ==========================================
-
-class PerfilDominion extends StatefulWidget {
-  const PerfilDominion({super.key});
-
-  @override
-  State<PerfilDominion> createState() =>
-      _PerfilDominionState();
-}
-
-class _PerfilDominionState extends State<PerfilDominion> {
-  final _nomeController = TextEditingController();
-  bool _carregando = false;
-  String? _fotoUrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _carregarPerfil();
-  }
-
-  Future<void> _carregarPerfil() async {
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
-
-    if (usuario == null) return;
-
-    try {
-      final dados = await Supabase.instance.client
-          .from('perfis')
-          .select()
-          .eq('id', usuario.id)
-          .maybeSingle();
-
-      if (!mounted) return;
-
-      setState(() {
-        _nomeController.text =
-            dados?['nome'] ?? '';
-        _fotoUrl = dados?['foto_url'];
-      });
-    } catch (_) {
-      _mensagem('Não foi possível carregar o perfil.');
-    }
-  }
-
-  Future<void> _selecionarFoto() async {
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
-
-    if (usuario == null) return;
-
-    try {
-      final arquivo = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
-
-      if (arquivo == null) return;
-
-      setState(() => _carregando = true);
-
-      final bytes = await arquivo.readAsBytes();
-      final extensao = arquivo.name.toLowerCase();
-
-      final tipo = extensao.endsWith('.png')
-          ? 'image/png'
-          : 'image/jpeg';
-
-      final caminho =
-          '${usuario.id}/avatar_${DateTime.now().millisecondsSinceEpoch}.${extensao.endsWith('.png') ? 'png' : 'jpg'}';
-
-      await Supabase.instance.client.storage
-          .from('avatars')
-          .uploadBinary(
-            caminho,
-            bytes,
-            fileOptions: FileOptions(
-              upsert: true,
-              contentType: tipo,
-            ),
-          );
-
-      final url = Supabase.instance.client.storage
-          .from('avatars')
-          .getPublicUrl(caminho);
-
-      await Supabase.instance.client
-          .from('perfis')
-          .upsert({
-        'id': usuario.id,
-        'foto_url': url,
-      });
-
-      if (!mounted) return;
-
-      setState(() {
-        _fotoUrl = url;
-      });
-
-      _mensagem('Avatar atualizado!');
-    } catch (e) {
-      _mensagem('Erro ao enviar foto. Verifique o Storage.');
-    } finally {
-      if (mounted) {
-        setState(() => _carregando = false);
-      }
-    }
-  }
-
-  Future<void> _salvarPerfil() async {
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
-
-    if (usuario == null) return;
-
-    final nome = _nomeController.text.trim();
-
-    if (nome.isEmpty) {
-      _mensagem('Digite seu nome.');
-      return;
-    }
-
-    setState(() => _carregando = true);
-
-    try {
-      await Supabase.instance.client
-          .from('perfis')
-          .upsert({
-        'id': usuario.id,
-        'nome': nome,
-        'foto_url': _fotoUrl,
-      });
-
-      _mensagem('Perfil atualizado com sucesso!');
-    } catch (_) {
-      _mensagem('Não foi possível salvar o perfil.');
-    } finally {
-      if (mounted) {
-        setState(() => _carregando = false);
-      }
-    }
-  }
-
-  void _mensagem(String texto) {
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(texto)),
-    );
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MEU PERFIL'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-
-            GestureDetector(
-              onTap: _carregando ? null : _selecionarFoto,
-              child: CircleAvatar(
-                radius: 65,
-                backgroundColor: DominionColors.dourado,
-                backgroundImage: _fotoUrl != null
-                    ? NetworkImage(_fotoUrl!)
-                    : null,
-                child: _fotoUrl == null
-                    ? const Icon(
-                        Icons.person,
-                        color: Colors.black,
-                        size: 70,
-                      )
-                    : null,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            TextButton.icon(
-              onPressed: _selecionarFoto,
-              icon: const Icon(
-                Icons.camera_alt,
-                color: DominionColors.dourado,
-              ),
-              label: const Text(
-                'ALTERAR AVATAR',
-                style: TextStyle(
-                  color: DominionColors.dourado,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            TextField(
-              controller: _nomeController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Nome do perfil',
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: DominionColors.dourado,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed:
-                    _carregando ? null : _salvarPerfil,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: DominionColors.dourado,
-                  foregroundColor: Colors.black,
-                ),
-                child: _carregando
-                    ? const CircularProgressIndicator(
-                        color: Colors.black,
-                      )
-                    : const Text('SALVAR PERFIL'),
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            ListTile(
-              leading: const Icon(
-                Icons.card_giftcard,
-                color: DominionColors.dourado,
-              ),
-              title: const Text('Presentes gratuitos'),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        const PresentesDominion(),
-                  ),
-                );
-              },
-            ),
-
-            ListTile(
-              leading: const Icon(
-                Icons.admin_panel_settings,
-                color: DominionColors.dourado,
-              ),
-              title: const Text('Painel administrativo'),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        const PainelAdminDominion(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ==========================================
-// PRESENTES GRATUITOS
-// ==========================================
-
-class PresentesDominion extends StatelessWidget {
-  const PresentesDominion({super.key});
-
-  final List<Map<String, dynamic>> presentes = const [
-    {'nome': 'Coração', 'icone': Icons.favorite},
-    {'nome': 'Estrela', 'icone': Icons.star},
-    {'nome': 'Rosa', 'icone': Icons.local_florist},
-    {'nome': 'Coroa', 'icone': Icons.workspace_premium},
-    {'nome': 'Diamante', 'icone': Icons.diamond},
-    {'nome': 'Fogo', 'icone': Icons.local_fire_department},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PRESENTES GRATUITOS'),
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(18),
-        itemCount: presentes.length,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 14,
-          mainAxisSpacing: 14,
-        ),
-        itemBuilder: (context, index) {
-          final presente = presentes[index];
-
-          return Container(
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: DominionColors.painel,
-              borderRadius: BorderRadius.circular(16),
+              gradient: const LinearGradient(
+                colors: [
+                  DominionColors.painel,
+                  DominionColors.roxo,
+                  DominionColors.fundo,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: DominionColors.dourado,
+                color: DominionColors.dourado.withOpacity(0.65),
               ),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  presente['icone'] as IconData,
-                  color: DominionColors.dourado,
-                  size: 48,
+                CircleAvatar(
+                  radius: 38,
+                  backgroundColor: DominionColors.dourado,
+                  backgroundImage:
+                      _fotoUsuario != null &&
+                              _fotoUsuario!.isNotEmpty
+                          ? NetworkImage(_fotoUsuario!)
+                          : null,
+                  child: _fotoUsuario == null ||
+                          _fotoUsuario!.isEmpty
+                      ? const Icon(
+                          Icons.person,
+                          color: DominionColors.preto,
+                          size: 42,
+                        )
+                      : null,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
-                  presente['nome'] as String,
+                  _carregandoPerfil
+                      ? 'Carregando perfil...'
+                      : 'BEM-VINDO, $_nomeUsuario',
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    color: DominionColors.dourado,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 17,
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'GRÁTIS',
+                  'SUA VOZ. SUA FAMÍLIA. SEU IMPÉRIO!',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.greenAccent,
-                    fontWeight: FontWeight.bold,
+                    color: DominionColors.branco,
+                    fontSize: 10,
+                    letterSpacing: 1,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: _abrirPerfil,
+                  icon: const Icon(Icons.edit),
+                  label: const Text('MEU PERFIL'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: DominionColors.dourado,
+                    side: const BorderSide(
+                      color: DominionColors.dourado,
+                    ),
                   ),
                 ),
               ],
             ),
-          );
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'SEU IMPÉRIO COMEÇA AQUI',
+            style: TextStyle(
+              color: DominionColors.dourado,
+              fontSize: 17,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _botaoPrincipal(
+            icone: Icons.headset_mic,
+            titulo: 'Salas ao vivo',
+            descricao: 'Entre nas salas e converse com a família.',
+            aoTocar: _abrirSalas,
+            cor: DominionColors.roxoClaro,
+          ),
+          _botaoPrincipal(
+            icone: Icons.play_circle_fill,
+            titulo: 'Sala de vídeos',
+            descricao:
+                'Assista aos vídeos disponíveis, sem gravar nem produzir.',
+            aoTocar: _abrirSalaDeVideos,
+          ),
+          _botaoPrincipal(
+            icone: Icons.add_circle,
+            titulo: 'Criar sala ao vivo',
+            descricao: 'Abra sua própria sala de conversa.',
+            aoTocar: _abrirCriarSala,
+          ),
+          _botaoPrincipal(
+            icone: Icons.card_giftcard,
+            titulo: 'Presentes gratuitos',
+            descricao: 'Acesse a área de presentes da comunidade.',
+            aoTocar: _abrirPresentes,
+            cor: DominionColors.roxoClaro,
+          ),
+          const SizedBox(height: 12),
+          const Center(
+            child: Text(
+              'AG. DOMÍNION ALFA',
+              style: TextStyle(
+                color: DominionColors.dourado,
+                letterSpacing: 2,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final paginas = <Widget>[
+      _inicio(),
+      const ListaSalasDominion(),
+      const CriarSalaDominion(),
+      const SalaVideosDominion(),
+      const PerfilDominion(),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'DOMÍNION LIVE',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
+          ),
+        ),
+        actions: [
+          IconButton(
+            tooltip: 'Sair da conta',
+            onPressed: _sair,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
+      body: IndexedStack(
+        index: _indiceSelecionado,
+        children: paginas,
+      ),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: DominionColors.painel,
+        indicatorColor: DominionColors.roxo.withOpacity(0.55),
+        selectedIndex: _indiceSelecionado,
+        onDestinationSelected: (indice) {
+          setState(() => _indiceSelecionado = indice);
         },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Início',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.headset_mic_outlined),
+            selectedIcon: Icon(Icons.headset_mic),
+            label: 'Salas',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add_circle_outline),
+            selectedIcon: Icon(Icons.add_circle),
+            label: 'Criar',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.play_circle_outline),
+            selectedIcon: Icon(Icons.play_circle_fill),
+            label: 'Vídeos',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
       ),
     );
   }
 }
 
-// ==========================================
-// PAINEL ADMINISTRATIVO PROTEGIDO
-// ==========================================
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class PainelAdminDominion extends StatelessWidget {
-  const PainelAdminDominion({super.key});
+class SalaVideoDominion extends StatefulWidget {
+  const SalaVideoDominion({super.key});
 
-  Future<bool> _verificarAdministrador() async {
-    final usuario =
-        Supabase.instance.client.auth.currentUser;
+  @override
+  State<SalaVideoDominion> createState() =>
+      _SalaVideoDominionState();
+}
 
-    if (usuario == null) return false;
+class _SalaVideoDominionState extends State<SalaVideoDominion> {
+  final TextEditingController _videoController =
+      TextEditingController();
 
-    final perfil = await Supabase.instance.client
-        .from('perfis')
-        .select('role')
-        .eq('id', usuario.id)
-        .maybeSingle();
+  String? _videoUrl;
 
-    return perfil?['role'] == 'admin';
+  static const Color roxo = Color(0xFF6A1B9A);
+  static const Color dourado = Color(0xFFE5BC58);
+  static const Color fundo = Color(0xFF08060B);
+  static const Color painel = Color(0xFF171020);
+
+  void _abrirVideo() {
+    final url = _videoController.text.trim();
+
+    final uri = Uri.tryParse(url);
+
+    if (uri == null ||
+        !uri.hasScheme ||
+        (uri.scheme != 'https' && uri.scheme != 'http') ||
+        uri.host.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Digite um link de vídeo válido.'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _videoUrl = url;
+    });
+
+    FocusScope.of(context).unfocus();
+  }
+
+  void _copiarLink() {
+    if (_videoUrl == null) return;
+
+    Clipboard.setData(ClipboardData(text: _videoUrl!));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Link copiado!'),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: fundo,
       appBar: AppBar(
-        title: const Text('PAINEL ADMINISTRATIVO'),
+        backgroundColor: painel,
+        foregroundColor: dourado,
+        title: const Text(
+          'SALA DE VÍDEO',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+          ),
+        ),
       ),
-      body: FutureBuilder<bool>(
-        future: _verificarAdministrador(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState ==
-              ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: DominionColors.dourado,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: painel,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: roxo,
+                  width: 1.5,
+                ),
               ),
-            );
-          }
-
-          if (snapshot.hasError ||
-              snapshot.data != true) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: const Column(
                 children: [
                   Icon(
-                    Icons.lock,
-                    color: Colors.redAccent,
-                    size: 65,
+                    Icons.ondemand_video,
+                    color: dourado,
+                    size: 58,
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 12),
                   Text(
-                    'ACESSO RESTRITO',
+                    'CINEMA DOMÍNION',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                      color: dourado,
+                      fontSize: 21,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Você não possui permissão administrativa.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.admin_panel_settings,
-                    color: DominionColors.dourado,
-                    size: 80,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'BEM-VINDO, ADMINISTRADOR',
+                    'Escolha um vídeo e reúna sua família '
+                    'para assistir.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: DominionColors.dourado,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                      fontSize: 14,
                     ),
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    'Área administrativa do DOMÍNION LIVE.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
             ),
-          );
-        },
+            const SizedBox(height: 22),
+            const Text(
+              'LINK DO VÍDEO',
+              style: TextStyle(
+                color: dourado,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _videoController,
+              keyboardType: TextInputType.url,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'https://...',
+                hintStyle: const TextStyle(
+                  color: Colors.white38,
+                ),
+                filled: true,
+                fillColor: painel,
+                prefixIcon: const Icon(
+                  Icons.link,
+                  color: dourado,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(
+                    color: roxo,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: _abrirVideo,
+                icon: const Icon(Icons.play_circle_fill),
+                label: const Text(
+                  'CARREGAR VÍDEO',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: roxo,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 22),
+            Container(
+              constraints: const BoxConstraints(
+                minHeight: 180,
+              ),
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: painel,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.white12,
+                ),
+              ),
+              child: _videoUrl == null
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.smart_display,
+                          color: Colors.white38,
+                          size: 54,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Nenhum vídeo selecionado',
+                          style: TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Cole um link acima para continuar.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white38,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.check_circle,
+                          color: dourado,
+                          size: 42,
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'LINK DO VÍDEO CARREGADO',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: dourado,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SelectableText(
+                          _videoUrl!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        OutlinedButton.icon(
+                          onPressed: _copiarLink,
+                          icon: const Icon(Icons.copy),
+                          label: const Text('COPIAR LINK'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: dourado,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+            const SizedBox(height: 18),
+            const Text(
+              'DOMÍNION LIVE • SUA VOZ. SUA FAMÍLIA. '
+              'SEU IMPÉRIO!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: dourado,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class VideoDominion {
+  final String titulo;
+  final String descricao;
+  final String url;
+  final String categoria;
+
+  const VideoDominion({
+    required this.titulo,
+    required this.descricao,
+    required this.url,
+    required this.categoria,
+  });
+}
+
+class CatalogoVideoDominion extends StatefulWidget {
+  const CatalogoVideoDominion({super.key});
+
+  @override
+  State<CatalogoVideoDominion> createState() =>
+      _CatalogoVideoDominionState();
+}
+
+class _CatalogoVideoDominionState
+    extends State<CatalogoVideoDominion> {
+  static const Color roxo = Color(0xFF6A1B9A);
+  static const Color dourado = Color(0xFFE5BC58);
+  static const Color fundo = Color(0xFF08060B);
+  static const Color painel = Color(0xFF171020);
+
+  final List<VideoDominion> videos = [];
+  final TextEditingController tituloController =
+      TextEditingController();
+  final TextEditingController descricaoController =
+      TextEditingController();
+  final TextEditingController urlController =
+      TextEditingController();
+
+  String categoriaSelecionada = 'Todos';
+
+  final List<String> categorias = const [
+    'Todos',
+    'Música',
+    'Família',
+    'Entretenimento',
+    'Outros',
+  ];
+
+  List<VideoDominion> get videosFiltrados {
+    if (categoriaSelecionada == 'Todos') {
+      return videos;
+    }
+
+    return videos
+        .where((video) =>
+            video.categoria == categoriaSelecionada)
+        .toList();
+  }
+
+  void adicionarVideo() {
+    final titulo = tituloController.text.trim();
+    final descricao = descricaoController.text.trim();
+    final url = urlController.text.trim();
+    final uri = Uri.tryParse(url);
+
+    if (titulo.isEmpty ||
+        uri == null ||
+        !uri.hasScheme ||
+        (uri.scheme != 'https' && uri.scheme != 'http') ||
+        uri.host.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Informe um título e um link válido.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      videos.insert(
+        0,
+        VideoDominion(
+          titulo: titulo,
+          descricao: descricao,
+          url: url,
+          categoria: categoriaSelecionada == 'Todos'
+              ? 'Outros'
+              : categoriaSelecionada,
+        ),
+      );
+
+      tituloController.clear();
+      descricaoController.clear();
+      urlController.clear();
+    });
+
+    Navigator.pop(context);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Vídeo adicionado ao catálogo!'),
+      ),
+    );
+  }
+
+  void mostrarFormulario() {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: painel,
+          title: const Text(
+            'Adicionar vídeo',
+            style: TextStyle(color: dourado),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                campo(
+                  controller: tituloController,
+                  texto: 'Título do vídeo',
+                ),
+                const SizedBox(height: 12),
+                campo(
+                  controller: descricaoController,
+                  texto: 'Descrição',
+                ),
+                const SizedBox(height: 12),
+                campo(
+                  controller: urlController,
+                  texto: 'Link HTTP ou HTTPS',
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(dialogContext),
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: adicionarVideo,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: roxo,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('ADICIONAR'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget campo({
+    required TextEditingController controller,
+    required String texto,
+  }) {
+    return TextField(
+      controller: controller,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: texto,
+        labelStyle: const TextStyle(color: dourado),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: roxo),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: dourado),
+        ),
+      ),
+    );
+  }
+
+  void abrirVideo(VideoDominion video) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: painel,
+          title: Text(
+            video.titulo,
+            style: const TextStyle(color: dourado),
+          ),
+          content: SelectableText(
+            '${video.descricao.isEmpty ? "Vídeo da família DOMÍNION." : video.descricao}\n\n'
+            'Link para assistir:\n${video.url}',
+            style: const TextStyle(
+              color: Colors.white70,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => const SalaVideoDominion(),
+                  ),
+                );
+              },
+              child: const Text(
+                'ABRIR SALA DE VÍDEO',
+                style: TextStyle(color: dourado),
+              ),
+            ),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(dialogContext),
+              child: const Text(
+                'FECHAR',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    tituloController.dispose();
+    descricaoController.dispose();
+    urlController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: fundo,
+      appBar: AppBar(
+        backgroundColor: painel,
+        foregroundColor: dourado,
+        title: const Text(
+          'VÍDEOS DOMÍNION',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: mostrarFormulario,
+            tooltip: 'Adicionar vídeo',
+            icon: const Icon(Icons.add_circle_outline),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: mostrarFormulario,
+        backgroundColor: roxo,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 58,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              children: categorias.map((categoria) {
+                final selecionada =
+                    categoriaSelecionada == categoria;
+
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ChoiceChip(
+                    label: Text(categoria),
+                    selected: selecionada,
+                    onSelected: (_) {
+                      setState(() {
+                        categoriaSelecionada = categoria;
+                      });
+                    },
+                    selectedColor: roxo,
+                    backgroundColor: painel,
+                    labelStyle: TextStyle(
+                      color: selecionada
+                          ? Colors.white
+                          : dourado,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          Expanded(
+            child: videosFiltrados.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.video_library_outlined,
+                            color: dourado,
+                            size: 64,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'CATÁLOGO VAZIO',
+                            style: TextStyle(
+                              color: dourado,
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Toque no botão + para adicionar '
+                            'um vídeo.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(14),
+                    itemCount: videosFiltrados.length,
+                    itemBuilder: (context, index) {
+                      final video = videosFiltrados[index];
+
+                      return Card(
+                        color: painel,
+                        margin: const EdgeInsets.only(
+                          bottom: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(16),
+                          side: const BorderSide(
+                            color: roxo,
+                          ),
+                        ),
+                        child: ListTile(
+                          contentPadding:
+                              const EdgeInsets.all(14),
+                          leading: const CircleAvatar(
+                            backgroundColor: roxo,
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: dourado,
+                            ),
+                          ),
+                          title: Text(
+                            video.titulo,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 6),
+                            child: Text(
+                              '${video.categoria}\n${video.descricao}',
+                              style: const TextStyle(
+                                color: Colors.white60,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: dourado,
+                            size: 18,
+                          ),
+                          onTap: () => abrirVideo(video),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ParticipanteVideoDominion {
+  final String nome;
+  final DateTime entrouEm;
+
+  ParticipanteVideoDominion({
+    required this.nome,
+    DateTime? entrouEm,
+  }) : entrouEm = entrouEm ?? DateTime.now();
+}
+
+class MensagemVideoDominion {
+  final String autor;
+  final String texto;
+  final DateTime enviadaEm;
+
+  MensagemVideoDominion({
+    required this.autor,
+    required this.texto,
+    DateTime? enviadaEm,
+  }) : enviadaEm = enviadaEm ?? DateTime.now();
+}
+
+class DetalheSalaVideoDominion extends StatefulWidget {
+  final String nomeSala;
+  final String nomeUsuario;
+  final String? videoUrl;
+
+  const DetalheSalaVideoDominion({
+    super.key,
+    this.nomeSala = 'CINEMA DOMÍNION',
+    this.nomeUsuario = 'Visitante',
+    this.videoUrl,
+  });
+
+  @override
+  State<DetalheSalaVideoDominion> createState() =>
+      _DetalheSalaVideoDominionState();
+}
+
+class _DetalheSalaVideoDominionState
+    extends State<DetalheSalaVideoDominion> {
+  static const Color roxo = Color(0xFF6A1B9A);
+  static const Color dourado = Color(0xFFE5BC58);
+  static const Color fundo = Color(0xFF08060B);
+  static const Color painel = Color(0xFF171020);
+
+  final TextEditingController mensagemController =
+      TextEditingController();
+
+  final List<ParticipanteVideoDominion> participantes = [];
+  final List<MensagemVideoDominion> mensagens = [];
+
+  bool entrouNaSala = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    participantes.add(
+      ParticipanteVideoDominion(
+        nome: widget.nomeUsuario,
+      ),
+    );
+
+    entrouNaSala = true;
+
+    mensagens.add(
+      MensagemVideoDominion(
+        autor: 'DOMÍNION',
+        texto: 'Bem-vindo à ${widget.nomeSala}!',
+      ),
+    );
+  }
+
+  void enviarMensagem() {
+    final texto = mensagemController.text.trim();
+
+    if (texto.isEmpty || !entrouNaSala) return;
+
+    setState(() {
+      mensagens.add(
+        MensagemVideoDominion(
+          autor: widget.nomeUsuario,
+          texto: texto,
+        ),
+      );
+
+      mensagemController.clear();
+    });
+  }
+
+  void sairDaSala() {
+    setState(() {
+      entrouNaSala = false;
+      participantes.removeWhere(
+        (p) => p.nome == widget.nomeUsuario,
+      );
+    });
+
+    Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    mensagemController.dispose();
+    super.dispose();
+  }
+
+  Widget tituloSecao(String texto, IconData icone) {
+    return Row(
+      children: [
+        Icon(icone, color: dourado),
+        const SizedBox(width: 8),
+        Text(
+          texto,
+          style: const TextStyle(
+            color: dourado,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: fundo,
+      appBar: AppBar(
+        backgroundColor: painel,
+        foregroundColor: dourado,
+        title: Text(widget.nomeSala),
+        actions: [
+          IconButton(
+            tooltip: 'Sair da sala',
+            onPressed: sairDaSala,
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: painel,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: roxo),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.movie_creation_outlined,
+                          size: 54,
+                          color: dourado,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          widget.nomeSala,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: dourado,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          entrouNaSala
+                              ? 'Você está nesta sala.'
+                              : 'Você saiu da sala.',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
+                        if (widget.videoUrl != null) ...[
+                          const SizedBox(height: 12),
+                          SelectableText(
+                            widget.videoUrl!,
+                            style: const TextStyle(
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  tituloSecao(
+                    'PARTICIPANTES',
+                    Icons.people_outline,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: painel,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: participantes.isEmpty
+                        ? const Text(
+                            'Nenhum participante na sala.',
+                            style: TextStyle(
+                              color: Colors.white60,
+                            ),
+                          )
+                        : Column(
+                            children: participantes.map((p) {
+                              return ListTile(
+                                leading: const CircleAvatar(
+                                  backgroundColor: roxo,
+                                  child: Icon(
+                                    Icons.person,
+                                    color: dourado,
+                                  ),
+                                ),
+                                title: Text(
+                                  p.nome,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                subtitle: const Text(
+                                  'Participante',
+                                  style: TextStyle(
+                                    color: Colors.white54,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                  ),
+                  const SizedBox(height: 24),
+                  tituloSecao(
+                    'CHAT DA SALA',
+                    Icons.chat_bubble_outline,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: painel,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: mensagens.isEmpty
+                        ? const Text(
+                            'Envie a primeira mensagem!',
+                            style: TextStyle(
+                              color: Colors.white60,
+                            ),
+                          )
+                        : Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: mensagens.map((m) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                  vertical: 7,
+                                ),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '${m.autor}: ',
+                                        style: const TextStyle(
+                                          color: dourado,
+                                          fontWeight:
+                                              FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: m.texto,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            if (entrouNaSala)
+              Container(
+                padding: const EdgeInsets.all(12),
+                color: painel,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: mensagemController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Digite sua mensagem...',
+                          hintStyle: const TextStyle(
+                            color: Colors.white38,
+                          ),
+                          filled: true,
+                          fillColor: fundo,
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(24),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(24),
+                            borderSide: const BorderSide(
+                              color: roxo,
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                        ),
+                        onSubmitted: (_) => enviarMensagem(),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: enviarMensagem,
+                      style: IconButton.styleFrom(
+                        backgroundColor: roxo,
+                      ),
+                      icon: const Icon(
+                        Icons.send,
+                        color: dourado,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InicioVideoDominion extends StatelessWidget {
+  const InicioVideoDominion({super.key});
+
+  static const Color roxo = Color(0xFF6A1B9A);
+  static const Color dourado = Color(0xFFE5BC58);
+  static const Color fundo = Color(0xFF08060B);
+  static const Color painel = Color(0xFF171020);
+
+  Widget criarCard({
+    required BuildContext context,
+    required IconData icone,
+    required String titulo,
+    required String descricao,
+    required VoidCallback aoTocar,
+  }) {
+    return Card(
+      color: painel,
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: const BorderSide(color: roxo),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(18),
+        leading: CircleAvatar(
+          radius: 27,
+          backgroundColor: roxo,
+          child: Icon(
+            icone,
+            color: dourado,
+            size: 28,
+          ),
+        ),
+        title: Text(
+          titulo,
+          style: const TextStyle(
+            color: dourado,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text(
+            descricao,
+            style: const TextStyle(
+              color: Colors.white70,
+            ),
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: dourado,
+          size: 17,
+        ),
+        onTap: aoTocar,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: fundo,
+      appBar: AppBar(
+        backgroundColor: painel,
+        foregroundColor: dourado,
+        title: const Text(
+          'DOMÍNION LIVE',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 28,
+                horizontal: 18,
+              ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF171020),
+                    Color(0xFF321044),
+                    Color(0xFF08060B),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: dourado,
+                  width: 1.3,
+                ),
+              ),
+              child: const Column(
+                children: [
+                  Icon(
+                    Icons.castle,
+                    color: dourado,
+                    size: 58,
+                  ),
+                  SizedBox(height: 14),
+                  Text(
+                    'DOMÍNION LIVE',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: dourado,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.4,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'SUA VOZ. SUA FAMÍLIA. SEU IMPÉRIO!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 26),
+            const Text(
+              'CENTRAL DE VÍDEOS',
+              style: TextStyle(
+                color: dourado,
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            criarCard(
+              context: context,
+              icone: Icons.video_library,
+              titulo: 'Catálogo de vídeos',
+              descricao:
+                  'Consulte e organize seus vídeos.',
+              aoTocar: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const CatalogoVideoDominion(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            criarCard(
+              context: context,
+              icone: Icons.movie_filter,
+              titulo: 'Sala de vídeo',
+              descricao:
+                  'Entre na área para assistir a vídeos.',
+              aoTocar: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const SalaVideoDominion(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            criarCard(
+              context: context,
+              icone: Icons.people_alt,
+              titulo: 'Sala com participantes',
+              descricao:
+                  'Consulte participantes e chat local.',
+              aoTocar: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const DetalheSalaVideoDominion(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 26),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: painel,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Text(
+                'DOMÍNION ALFA\n'
+                'Uma família. Uma aliança. Um império.\n\n'
+                'Esta área é dedicada a assistir a vídeos. '
+                'Não utiliza câmera nem transmissão de vídeo ao vivo.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white70,
+                  height: 1.6,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
