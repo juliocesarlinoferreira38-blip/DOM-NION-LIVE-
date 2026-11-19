@@ -40,7 +40,7 @@ class DominionLiveApp extends StatelessWidget {
           surface: dlPainel,
         ),
       ),
-      home: const ProjetoDominion(),
+      home: ProjetoDominion(),
     );
   }
 }
