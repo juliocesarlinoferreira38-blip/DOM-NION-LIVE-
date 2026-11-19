@@ -1048,10 +1048,10 @@ class _TelaPrincipalDominionState
   Widget build(BuildContext context) {
     final paginas = <Widget>[
       _inicio(),
-      const ListaSalasDominion(),
-      const CriarSalaDominion(),
-      const SalaVideosDominion(),
-      const PerfilDominion(),
+       ListaSalasDominion(),
+       CriarSalaDominion(),
+       SalaVideosDominion(),
+       PerfilDominion(),
     ];
 
     return Scaffold(
