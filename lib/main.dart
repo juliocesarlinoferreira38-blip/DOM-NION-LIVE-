@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,10 +12,10 @@ const Color dlDourado = Color(0xFFE5BC58);
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Conecta no DOMÍNION LIVE - Supabase
   await Supabase.initialize(
     url: 'https://xmmaemdayfwvxambhaiu.supabase.co',
-    publishableKey: 'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc',
+    publishableKey:
+        'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc',
   );
 
   runApp(const DominionLiveApp());
@@ -40,7 +41,7 @@ class DominionLiveApp extends StatelessWidget {
           surface: dlPainel,
         ),
       ),
-      home: ProjetoDominion(),
+      home: PerfilDominion(),
     );
   }
 }
