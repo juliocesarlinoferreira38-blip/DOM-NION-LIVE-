@@ -2349,3 +2349,53 @@ class InicioVideoDominion extends StatelessWidget {
     );
   }
 }
+// REMENDO - Telas que faltavam no PDF
+class PerfilDominion extends StatelessWidget {
+  const PerfilDominion({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('PERFIL - Em breve')),
+    );
+  }
+}
+
+class ListaSalasDominion extends StatelessWidget {
+  const ListaSalasDominion({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('SALAS - Em breve')),
+    );
+  }
+}
+
+class CriarSalaDominion extends StatelessWidget {
+  const CriarSalaDominion({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('CRIAR SALA - Em breve')),
+    );
+  }
+}
+
+class SalaVideosDominion extends StatelessWidget {
+  const SalaVideosDominion({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('VIDEOS - Em breve')),
+    );
+  }
+}
+
+class PresentesDominion extends StatelessWidget {
+  const PresentesDominion({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('PRESENTES - Em breve')),
+    );
+  }
+}
