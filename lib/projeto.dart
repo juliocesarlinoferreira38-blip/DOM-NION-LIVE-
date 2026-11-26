@@ -16,7 +16,7 @@ const String supabaseUrl =
     'https://xmmaemdayfwvxambhaiu.supabase.co';
 
 const String supabasePublishableKey =
-    'COLE_AQUI_SUA_CHAVE_PUBLISHABLE';
+    'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc';
 
 // =====================================================
 // INICIALIZAÇÃO
