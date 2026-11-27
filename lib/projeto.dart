@@ -11,7 +11,7 @@ const String supabaseUrl =
     'https://xmmaemdayfwvxambhaiu.supabase.co';
 
 // COLOQUE AQUI SUA CHAVE PUBLICÁVEL DO SUPABASE.
-const String supabaseKey = 'COLE_AQUI_SUA_CHAVE_PUBLISHABLE';
+const String supabaseKey = 'sb_publishable_hIyp9xdiQhUj1h_VnTsHZg_yMWDW9dc';
 
 const Color fundo = Color(0xFF08060B);
 const Color painel = Color(0xFF171020);
